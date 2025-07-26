@@ -32,7 +32,7 @@
       "icons/icon.ico"
     ],
     "externalBin": [
-        "binaries/pocketbase"
+      "binaries/pocketbase"
     ]
   }
 }
