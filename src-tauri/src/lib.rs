@@ -5,20 +5,37 @@ use tauri_plugin_shell::ShellExt;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_opener::init())
         .setup(|app| {
             let app_handle = app.app_handle().clone();
+            println!("Starting PocketBase...");
             tauri::async_runtime::spawn(async move {
-                let sidecar = app_handle.shell().sidecar("pocketbase").unwrap();
+                let data_dir = app_handle.path().app_data_dir().unwrap().join("pb_data");
+                std::fs::create_dir_all(&data_dir).ok();
+                println!("Using PocketBase data directory: {:?}", data_dir);
+
+                let sidecar = app_handle.shell().sidecar("pocketbase").unwrap().args([
+                    "serve",
+                    "--dir",
+                    data_dir.to_str().unwrap(),
+                ]);
+                println!("PocketBase sidecar: {:?}", sidecar);
                 let (mut rx, _child) = sidecar.spawn().expect("Failed to start PocketBase");
 
                 while let Some(event) = rx.recv().await {
-                    if let CommandEvent::Stdout(line) = event {
-                        println!("{}", String::from_utf8_lossy(&line));
+                    match event {
+                        CommandEvent::Stdout(line) => {
+                            println!("[PB STDOUT] {}", String::from_utf8_lossy(&line));
+                        }
+                        CommandEvent::Stderr(line) => {
+                            eprintln!("[PB STDERR] {}", String::from_utf8_lossy(&line));
+                        }
+                        other => {
+                            println!("[PB EVENT] {:?}", other);
+                        }
                     }
-                }
-                // No need to wait or kill here
+                } // No need to wait or kill here
             });
 
             Ok(())
