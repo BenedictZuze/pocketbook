@@ -1,6 +1,6 @@
 use once_cell::sync::Lazy;
 use std::sync::Mutex;
-use tauri::Manager;
+use tauri::{AppHandle, Manager};
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
 use tauri_plugin_shell::ShellExt;
 
@@ -63,4 +63,28 @@ pub fn run() {
             }
             _ => {}
         })
+}
+
+#[tauri::command]
+async fn start_pocketbase_instance(
+    app_handle: &AppHandle,
+    project_name: String,
+) -> Result<(), String> {
+    let data_dir = app_handle
+        .path()
+        .app_data_dir()
+        .unwrap()
+        .join(format!("pb_data/{}", project_name));
+    std::fs::create_dir_all(&data_dir).map_err(|e| e.to_string())?;
+    let port = portpicker::pick_unused_port().ok_or("No available port found")?;
+    let sidecar = app_handle.shell().sidecar("pocketbase").unwrap().args([
+        "serve",
+        "--dir",
+        data_dir.to_str().unwrap(),
+        "--http",
+        format!("127.0.0.1:{}", port).as_str(),
+    ]);
+    println!("Starting PocketBase instance: {:?}", sidecar);
+    let (mut _rx, mut _child) = sidecar.spawn().unwrap();
+    Ok(())
 }
