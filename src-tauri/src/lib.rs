@@ -5,6 +5,7 @@ use tauri_plugin_shell::process::{CommandChild, CommandEvent};
 use tauri_plugin_shell::ShellExt;
 pub mod project_manager;
 pub mod types;
+// use crate::project_manager::ProjectManager;
 
 pub static MASTER_INSTANCE: Lazy<Mutex<Option<CommandChild>>> = Lazy::new(|| Mutex::new(None));
 
