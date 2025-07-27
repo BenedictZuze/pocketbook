@@ -15,6 +15,7 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
+            dotenvy::dotenv().unwrap();
             let app_handle = app.app_handle().clone();
             println!("Starting PocketBase...");
             tauri::async_runtime::spawn(async move {
