@@ -1,6 +1,10 @@
+use once_cell::sync::Lazy;
+use std::sync::Mutex;
 use tauri::Manager;
-use tauri_plugin_shell::process::CommandEvent;
+use tauri_plugin_shell::process::{CommandChild, CommandEvent};
 use tauri_plugin_shell::ShellExt;
+
+pub static MASTER_INSTANCE: Lazy<Mutex<Option<CommandChild>>> = Lazy::new(|| Mutex::new(None));
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -21,7 +25,9 @@ pub fn run() {
                     data_dir.to_str().unwrap(),
                 ]);
                 println!("PocketBase sidecar: {:?}", sidecar);
-                let (mut rx, _child) = sidecar.spawn().expect("Failed to start PocketBase");
+                let (mut rx, child) = sidecar.spawn().expect("Failed to start PocketBase");
+
+                *MASTER_INSTANCE.lock().unwrap() = Some(child);
 
                 while let Some(event) = rx.recv().await {
                     match event {
