@@ -1,4 +1,5 @@
 import { PocketBaseProject, NewProjectData } from "../types";
+import { invoke } from "@tauri-apps/api/core";
 
 export const generateProjectId = (): string => {
   return Math.random().toString(36).substr(2, 9);
@@ -13,10 +14,11 @@ export const getNextAvailablePort = (projects: PocketBaseProject[]): number => {
   return port;
 };
 
-export const createProject = (
+export const createProject = async (
   data: NewProjectData,
   existingProjects: PocketBaseProject[]
-): PocketBaseProject => {
+): Promise<PocketBaseProject> => {
+  await invoke("start_project", { project_name: data.name });
   return {
     id: generateProjectId(),
     name: data.name,

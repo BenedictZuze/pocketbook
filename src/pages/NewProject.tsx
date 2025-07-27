@@ -29,14 +29,14 @@ export const NewProject: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
       return;
     }
 
-    const newProject = createProject(formData, projects);
+    const newProject = await createProject(formData, projects);
     setProjects([...projects, newProject]);
     setLocation("/");
   };
