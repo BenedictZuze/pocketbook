@@ -50,7 +50,7 @@ pub fn run() {
         .expect("error while building tauri application")
         .run(|_app_handle, event| match event {
             tauri::RunEvent::ExitRequested { .. } => {
-                println!("App is exiting, kill the sidecar if needed");
+                println!("App is exiting, Closing Master Instance...");
                 if let Some(child) = MASTER_INSTANCE.lock().unwrap().take() {
                     let _ = child.kill();
                 }
