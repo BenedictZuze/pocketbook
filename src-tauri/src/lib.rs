@@ -6,6 +6,7 @@ use tauri_plugin_shell::ShellExt;
 pub mod project_manager;
 pub mod types;
 use crate::project_manager::ProjectManager;
+use crate::types::{PocketBaseProject, ProjectStatus};
 use pocketbase_sdk::client::Client as PocketBaseClient;
 
 pub static MASTER_INSTANCE: Lazy<Mutex<Option<CommandChild>>> = Lazy::new(|| Mutex::new(None));
@@ -79,7 +80,10 @@ pub fn run() {
 }
 
 #[tauri::command]
-fn start_pocketbase_instance(app_handle: AppHandle, project_name: String) -> Result<(), String> {
+async fn start_pocketbase_instance(
+    app_handle: AppHandle,
+    project_name: String,
+) -> Result<(), String> {
     let data_dir = app_handle
         .path()
         .app_data_dir()
@@ -96,5 +100,22 @@ fn start_pocketbase_instance(app_handle: AppHandle, project_name: String) -> Res
     ]);
     println!("Starting PocketBase instance: {:?}", sidecar);
     let (mut _rx, mut _child) = sidecar.spawn().unwrap();
+    let project_manager = app_handle.state::<ProjectManager>();
+    let project = PocketBaseProject {
+        id: project_name.clone(),
+        name: project_name.clone(),
+        port,
+        status: ProjectStatus::Running,
+        is_healthy: true,
+        data_directory: Some(data_dir.to_str().unwrap().to_string()),
+        created_at: chrono::Utc::now(),
+        last_started: None,
+        logs: vec![],
+    };
+    project_manager
+        .start_project(project)
+        .await
+        .map_err(|e| e.to_string())
+        .unwrap();
     Ok(())
 }
