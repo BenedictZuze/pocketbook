@@ -12,20 +12,14 @@ impl ProjectManager {
         ProjectManager { client }
     }
 
-    pub async fn start_project(&self, project_name: String) -> Result<PocketBaseProject, String> {
-        // Logic to start a project using the PocketBase client
-        // This is a placeholder implementation
-        Ok(PocketBaseProject {
-            id: "project_id".to_string(),
-            name: project_name,
-            port: 8090,
-            status: ProjectStatus::Running,
-            is_healthy: true,
-            data_directory: Some("data_directory".to_string()),
-            created_at: Utc::now(),
-            last_started: Some(Utc::now()),
-            logs: vec![],
-        })
+    pub async fn start_project(&self, project: PocketBaseProject) -> Result<String, String> {
+        let create_response = self
+            .client
+            .records("projects")
+            .create(project)
+            .call()
+            .unwrap();
+        Ok(create_response.id)
     }
 
     pub async fn stop_project(&self, project_name: String) -> Result<PocketBaseProject, String> {
