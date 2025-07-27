@@ -18,7 +18,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div className="flex items-center space-x-3 cursor-pointer group">
                 <Database className="h-8 w-8 text-blue-600 group-hover:text-blue-700 transition-colors" />
                 <h1 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
-                  PocketBase Manager
+                  PocketBook
                 </h1>
               </div>
             </Link>
