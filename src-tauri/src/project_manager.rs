@@ -1,6 +1,6 @@
 use crate::types::{PocketBaseProject, ProjectStatus};
 use chrono::Utc;
-use pocketbase_sdk::client::Auth as PocketBaseClient;
+use pocketbase_sdk::client::Client as PocketBaseClient;
 
 #[derive(Debug, Clone)]
 pub struct ProjectManager {
