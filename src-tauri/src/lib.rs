@@ -15,7 +15,11 @@ pub fn run() {
             let app_handle = app.app_handle().clone();
             println!("Starting PocketBase...");
             tauri::async_runtime::spawn(async move {
-                let data_dir = app_handle.path().app_data_dir().unwrap().join("pb_data");
+                let data_dir = app_handle
+                    .path()
+                    .app_data_dir()
+                    .unwrap()
+                    .join("pb_data/master");
                 std::fs::create_dir_all(&data_dir).ok();
                 println!("Using PocketBase data directory: {:?}", data_dir);
 
