@@ -1,6 +1,7 @@
 use once_cell::sync::Lazy;
 use std::sync::Mutex;
 use tauri::Manager;
+use tauri::RunEvent;
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
 use tauri_plugin_shell::ShellExt;
 
