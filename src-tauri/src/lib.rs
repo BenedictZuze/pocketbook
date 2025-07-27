@@ -27,6 +27,8 @@ pub fn run() {
                     "serve",
                     "--dir",
                     data_dir.to_str().unwrap(),
+                    "--http",
+                    "127.0.0.1:8090",
                 ]);
                 println!("PocketBase sidecar: {:?}", sidecar);
                 let (mut rx, child) = sidecar.spawn().expect("Failed to start PocketBase");
