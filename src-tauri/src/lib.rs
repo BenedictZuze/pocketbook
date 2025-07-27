@@ -52,6 +52,7 @@ pub fn run() {
 
             Ok(())
         })
+        .invoke_handler(tauri::generate_handler![start_pocketbase_instance,])
         .build(tauri::generate_context!())
         .expect("error while building tauri application")
         .run(|_app_handle, event| match event {
@@ -66,10 +67,7 @@ pub fn run() {
 }
 
 #[tauri::command]
-async fn start_pocketbase_instance(
-    app_handle: &AppHandle,
-    project_name: String,
-) -> Result<(), String> {
+fn start_pocketbase_instance(app_handle: AppHandle, project_name: String) -> Result<(), String> {
     let data_dir = app_handle
         .path()
         .app_data_dir()
