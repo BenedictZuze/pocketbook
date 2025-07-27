@@ -18,7 +18,7 @@ export const createProject = async (
   data: NewProjectData,
   existingProjects: PocketBaseProject[]
 ): Promise<PocketBaseProject> => {
-  await invoke("start_project", { project_name: data.name });
+  await invoke("start_pocketbase_instance", { projectName: data.name });
   return {
     id: generateProjectId(),
     name: data.name,

@@ -37,6 +37,8 @@ export const NewProject: React.FC = () => {
     }
 
     const newProject = await createProject(formData, projects);
+    console.log(newProject);
+
     setProjects([...projects, newProject]);
     setLocation("/");
   };
