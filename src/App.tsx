@@ -1,24 +1,29 @@
-import reactLogo from "./assets/react.svg";
-import "./App.css";
+import { Route, Router, Switch } from "wouter";
+import { Home } from "./pages/Home";
+import { Layout } from "./components/Layout";
+import { Provider } from "jotai";
 
 function App() {
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-    </main>
+    <Provider>
+      <Router>
+        <Layout>
+          <Switch>
+            <Route path="/" component={Home} />
+            <Route>
+              <div className="text-center py-12">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  Page Not Found
+                </h2>
+                <p className="text-gray-600">
+                  The page you're looking for doesn't exist.
+                </p>
+              </div>
+            </Route>
+          </Switch>
+        </Layout>
+      </Router>
+    </Provider>
   );
 }
 
