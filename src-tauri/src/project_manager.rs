@@ -1,14 +1,14 @@
 use crate::types::{PocketBaseProject, ProjectStatus};
 use chrono::Utc;
-use pocketbase_sdk::client::Client as PocketBaseClient;
+use pocketbase_sdk::client::{Auth, Client as PocketBaseClient};
 
 #[derive(Debug, Clone)]
 pub struct ProjectManager {
-    pub client: PocketBaseClient,
+    pub client: PocketBaseClient<Auth>,
 }
 
 impl ProjectManager {
-    pub fn new(client: PocketBaseClient) -> Self {
+    pub fn new(client: PocketBaseClient<Auth>) -> Self {
         ProjectManager { client }
     }
 
@@ -45,18 +45,13 @@ impl ProjectManager {
     }
 
     pub async fn list_projects(&self) -> Result<Vec<PocketBaseProject>, String> {
-        // Logic to list projects using the PocketBase client
-        // This is a placeholder implementation
-        Ok(vec![PocketBaseProject {
-            id: "project_id".to_string(),
-            name: "Example Project".to_string(),
-            port: 8090,
-            status: ProjectStatus::Running,
-            is_healthy: true,
-            data_directory: Some("data_directory".to_string()),
-            created_at: Utc::now(),
-            last_started: Some(Utc::now()),
-            logs: vec![],
-        }])
+        let projects = self
+            .client
+            .records("projects")
+            .list()
+            .call::<PocketBaseProject>()
+            .unwrap();
+        let projects = projects.items;
+        Ok(projects)
     }
 }
