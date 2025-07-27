@@ -17,26 +17,25 @@ pub struct PocketBaseProject {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_started: Option<DateTime<Utc>>,
-
-    pub logs: Vec<LogEntry>,
+    // pub logs: Vec<LogEntry>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct LogEntry {
-    pub id: String,
-    pub timestamp: DateTime<Utc>,
-    pub level: LogLevel,
-    pub message: String,
-}
+// #[derive(Debug, Clone, Serialize, Deserialize)]
+// #[serde(rename_all = "camelCase")]
+// pub struct LogEntry {
+//     pub id: String,
+//     pub timestamp: DateTime<Utc>,
+//     pub level: LogLevel,
+//     pub message: String,
+// }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum LogLevel {
-    Info,
-    Warn,
-    Error,
-}
+// #[derive(Debug, Clone, Serialize, Deserialize)]
+// #[serde(rename_all = "lowercase")]
+// pub enum LogLevel {
+//     Info,
+//     Warn,
+//     Error,
+// }
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]

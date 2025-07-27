@@ -110,7 +110,7 @@ async fn start_pocketbase_instance(
         data_directory: Some(data_dir.to_str().unwrap().to_string()),
         created_at: chrono::Utc::now(),
         last_started: None,
-        logs: vec![],
+        // logs: vec![],
     };
     project_manager
         .start_project(project)
