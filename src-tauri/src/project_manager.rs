@@ -22,7 +22,7 @@ impl ProjectManager {
         Ok(create_response.id)
     }
 
-    pub async fn stop_project(&self, project_name: String) -> Result<PocketBaseProject, String> {
+    pub async fn stop_project(&self, project_name: String) -> Result<String, String> {
         let mut project = self
             .client
             .records("projects")
@@ -30,7 +30,7 @@ impl ProjectManager {
             .call::<PocketBaseProject>()
             .unwrap();
         project.status = ProjectStatus::Stopped;
-        Ok(project)
+        Ok(project.id)
     }
 
     pub async fn list_projects(&self) -> Result<Vec<PocketBaseProject>, String> {
