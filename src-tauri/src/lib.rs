@@ -1,7 +1,6 @@
 use once_cell::sync::Lazy;
 use std::sync::Mutex;
 use tauri::Manager;
-use tauri::RunEvent::Exit;
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
 use tauri_plugin_shell::ShellExt;
 
@@ -47,6 +46,15 @@ pub fn run() {
 
             Ok(())
         })
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .build(tauri::generate_context!())
+        .expect("error while building tauri application")
+        .run(|_app_handle, event| match event {
+            tauri::RunEvent::ExitRequested { .. } => {
+                println!("App is exiting, kill the sidecar if needed");
+                if let Some(child) = MASTER_INSTANCE.lock().unwrap().take() {
+                    let _ = child.kill();
+                }
+            }
+            _ => {}
+        })
 }
