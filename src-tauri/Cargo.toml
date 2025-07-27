@@ -29,4 +29,5 @@ portpicker = "0.1.1"
 pocketbase-sdk = "0.1.1"
 chrono = { version = "0.4.41", features = ["serde"] }
 anyhow = "1.0.98"
+dotenvy = "0.15.7"
 
