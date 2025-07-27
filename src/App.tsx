@@ -2,6 +2,7 @@ import { Route, Router, Switch } from "wouter";
 import { Home } from "./pages/Home";
 import { Layout } from "./components/Layout";
 import { Provider } from "jotai";
+import { NewProject } from "./pages/NewProject";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Layout>
           <Switch>
             <Route path="/" component={Home} />
+            <Route path="/new" component={NewProject} />
             <Route>
               <div className="text-center py-12">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
