@@ -23,19 +23,14 @@ impl ProjectManager {
     }
 
     pub async fn stop_project(&self, project_name: String) -> Result<PocketBaseProject, String> {
-        // Logic to start a project using the PocketBase client
-        // This is a placeholder implementation
-        Ok(PocketBaseProject {
-            id: "project_id".to_string(),
-            name: project_name,
-            port: 8090,
-            status: ProjectStatus::Stopped,
-            is_healthy: true,
-            data_directory: Some("data_directory".to_string()),
-            created_at: Utc::now(),
-            last_started: Some(Utc::now()),
-            logs: vec![],
-        })
+        let mut project = self
+            .client
+            .records("projects")
+            .view(&project_name)
+            .call::<PocketBaseProject>()
+            .unwrap();
+        project.status = ProjectStatus::Stopped;
+        Ok(project)
     }
 
     pub async fn list_projects(&self) -> Result<Vec<PocketBaseProject>, String> {
