@@ -1,5 +1,4 @@
 use crate::types::{PocketBaseProject, ProjectStatus};
-use chrono::Utc;
 use pocketbase_sdk::client::{Auth, Client as PocketBaseClient};
 
 #[derive(Debug, Clone)]
