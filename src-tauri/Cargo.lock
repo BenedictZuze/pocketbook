@@ -2707,6 +2707,7 @@ dependencies = [
 name = "pocketbook"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "chrono",
  "once_cell",
  "pocketbase-sdk",
