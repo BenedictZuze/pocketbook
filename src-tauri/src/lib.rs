@@ -5,7 +5,8 @@ use tauri_plugin_shell::process::{CommandChild, CommandEvent};
 use tauri_plugin_shell::ShellExt;
 pub mod project_manager;
 pub mod types;
-// use crate::project_manager::ProjectManager;
+use crate::project_manager::ProjectManager;
+use pocketbase_sdk::client::Client as PocketBaseClient;
 
 pub static MASTER_INSTANCE: Lazy<Mutex<Option<CommandChild>>> = Lazy::new(|| Mutex::new(None));
 
@@ -53,6 +54,11 @@ pub fn run() {
                     }
                 } // No need to wait or kill here
             });
+            app.manage(ProjectManager::new(
+                PocketBaseClient::new("http://localhost:8090")
+                    .auth_with_password("users", "sreedev@icloud.com", "Sreedev123")
+                    .unwrap(),
+            ));
 
             Ok(())
         })
