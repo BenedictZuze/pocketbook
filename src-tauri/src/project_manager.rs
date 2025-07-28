@@ -40,7 +40,7 @@ impl ProjectManager {
             .view(&project_name)
             .call::<PocketBaseProject>()
             .unwrap();
-        project.status = ProjectStatus::Stopped;
+        project.status = ProjectStatus::Running;
         Ok(project.pid.clone())
     }
 
