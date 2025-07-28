@@ -1,4 +1,5 @@
 use once_cell::sync::Lazy;
+use pocketbase_sdk::client::Client as PocketBaseClient;
 use std::sync::Mutex;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
@@ -8,7 +9,7 @@ pub mod types;
 pub mod utils;
 use crate::project_manager::ProjectManager;
 use crate::types::{PocketBaseProject, ProjectStatus};
-use pocketbase_sdk::client::Client as PocketBaseClient;
+use crate::utils::kill_pid;
 
 pub static MASTER_INSTANCE: Lazy<Mutex<Option<CommandChild>>> = Lazy::new(|| Mutex::new(None));
 
@@ -66,7 +67,10 @@ pub fn run() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![start_pocketbase_instance,])
+        .invoke_handler(tauri::generate_handler![
+            start_pocketbase_instance,
+            stop_pocketbase_instance
+        ])
         .build(tauri::generate_context!())
         .expect("error while building tauri application")
         .run(|_app_handle, event| match event {
@@ -132,5 +136,13 @@ async fn stop_pocketbase_instance(
         .await
         .map_err(|e| e.to_string())
         .unwrap();
+    let pid: u32 = pid
+        .parse()
+        .map_err(|_| "Invalid PID format".to_string())
+        .unwrap();
+    if let Err(e) = kill_pid(pid) {
+        print!("Failed to stop PocketBase process: {}", e);
+        return Err(format!("Failed to stop PocketBase process: {}", e));
+    }
     Ok(())
 }
