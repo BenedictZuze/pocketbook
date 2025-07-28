@@ -31,6 +31,10 @@ export const createProject = async (
   };
 };
 
+export const stopProject = async (projectName: string): Promise<string> => {
+  return await invoke("stop_pocketbase_instance", { projectName });
+};
+
 export const formatDate = (date: Date): string => {
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
