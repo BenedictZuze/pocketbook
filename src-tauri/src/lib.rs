@@ -102,7 +102,6 @@ async fn start_pocketbase_instance(
     let (mut _rx, mut _child) = sidecar.spawn().unwrap();
     let project_manager = app_handle.state::<ProjectManager>();
     let project = PocketBaseProject {
-        id: project_name.clone(),
         name: project_name.clone(),
         port,
         status: ProjectStatus::Running,

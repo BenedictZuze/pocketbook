@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PocketBaseProject {
-    pub id: String,
     pub name: String,
     pub port: u16,
     pub status: ProjectStatus,
