@@ -57,6 +57,16 @@ impl ProjectManager {
         Ok((pid, data_dir, port))
     }
 
+    async fn get_project(&self, project_name: String) -> Result<PocketBaseProject, String> {
+        let project = self
+            .client
+            .records("projects")
+            .view(&project_name)
+            .call::<PocketBaseProject>()
+            .unwrap();
+        Ok(project)
+    }
+
     pub async fn list_projects(&self) -> Result<Vec<PocketBaseProject>, String> {
         let projects = self
             .client
