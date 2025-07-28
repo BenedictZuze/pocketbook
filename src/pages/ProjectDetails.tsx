@@ -168,48 +168,54 @@ export const ProjectDetails: React.FC = () => {
               Recent Logs
             </h2>
 
-            {project.logs.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-gray-500">No logs available</p>
-                <p className="text-sm text-gray-400 mt-1">
-                  Logs will appear here when the project is running
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-3 max-h-96 overflow-y-auto">
-                {project.logs.map((log) => (
-                  <div
-                    key={log.id}
-                    className="flex items-start space-x-3 p-3 bg-gray-50 rounded-md"
-                  >
-                    <div className="flex-shrink-0">
-                      <span
-                        className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
-                          log.level === "error"
-                            ? "bg-red-100 text-red-800"
-                            : log.level === "warn"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-blue-100 text-blue-800"
-                        }`}
-                      >
-                        {log.level.toUpperCase()}
-                      </span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-gray-900 font-mono">
-                        {log.message}
-                      </p>
-                      <p className="text-xs text-gray-500 mt-1">
-                        {formatDate(log.timestamp)}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className="text-center py-8">
+              <p className="text-gray-500">No logs available</p>
+              <p className="text-sm text-gray-400 mt-1">
+                Logs will appear here when the project is running
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
+// {project.logs.length === 0 ? (
+//               <div className="text-center py-8">
+//                 <p className="text-gray-500">No logs available</p>
+//                 <p className="text-sm text-gray-400 mt-1">
+//                   Logs will appear here when the project is running
+//                 </p>
+//               </div>
+//             ) : (
+//               <div className="space-y-3 max-h-96 overflow-y-auto">
+//                 {project.logs.map((log) => (
+//                   <div
+//                     key={log.id}
+//                     className="flex items-start space-x-3 p-3 bg-gray-50 rounded-md"
+//                   >
+//                     <div className="flex-shrink-0">
+//                       <span
+//                         className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
+//                           log.level === "error"
+//                             ? "bg-red-100 text-red-800"
+//                             : log.level === "warn"
+//                             ? "bg-yellow-100 text-yellow-800"
+//                             : "bg-blue-100 text-blue-800"
+//                         }`}
+//                       >
+//                         {log.level.toUpperCase()}
+//                       </span>
+//                     </div>
+//                     <div className="flex-1 min-w-0">
+//                       <p className="text-sm text-gray-900 font-mono">
+//                         {log.message}
+//                       </p>
+//                       <p className="text-xs text-gray-500 mt-1">
+//                         {formatDate(log.timestamp)}
+//                       </p>
+//                     </div>
+//                   </div>
+//                 ))}
+//               </div>
