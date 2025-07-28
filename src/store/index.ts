@@ -1,5 +1,6 @@
 import { atom } from "jotai";
 import { PocketBaseProject, LogEntry } from "../types";
+import PocketBase from "pocketbase";
 
 // Mock data for demonstration
 const mockLogs: LogEntry[] = [
@@ -57,7 +58,22 @@ const initialProjects: PocketBaseProject[] = [
   },
 ];
 
-export const projectsAtom = atom<PocketBaseProject[]>(initialProjects);
+const pb = new PocketBase("http://127.0.0.1:8090");
+const db = await pb
+  .collection("users")
+  .authWithPassword(
+    import.meta.env.VITE_MASTER_EMAIL,
+    import.meta.env.VITE_MASTER_PASSWORD
+  );
+export const pbAtom = atom<PocketBase>(pb);
+export const dbAtom = atom(db);
+
+const initialDbProjects = await pb
+  .collection("projects")
+  .getFullList<PocketBaseProject>();
+export const projectsAtom = atom<PocketBaseProject[]>(
+  initialDbProjects || initialProjects
+);
 export const selectedProjectIdAtom = atom<string | null>(null);
 
 // Derived atom for selected project
