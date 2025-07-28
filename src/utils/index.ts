@@ -31,8 +31,12 @@ export const createProject = async (
   };
 };
 
-export const stopProject = async (projectName: string): Promise<string> => {
+export const stopProject = async (projectName: string): Promise<void> => {
   return await invoke("stop_pocketbase_instance", { projectName });
+};
+
+export const resumeProject = async (projectName: string): Promise<void> => {
+  return await invoke("resume_pocketbase_instance", { projectName });
 };
 
 export const formatDate = (date: Date): string => {
