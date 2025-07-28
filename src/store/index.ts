@@ -1,28 +1,28 @@
 import { atom } from "jotai";
-import { PocketBaseProject, LogEntry } from "../types";
+import { PocketBaseProject } from "../types";
 import PocketBase from "pocketbase";
 
 // Mock data for demonstration
-const mockLogs: LogEntry[] = [
-  {
-    id: "1",
-    timestamp: new Date(Date.now() - 3600000),
-    level: "info",
-    message: "Server started successfully on port 8090",
-  },
-  {
-    id: "2",
-    timestamp: new Date(Date.now() - 1800000),
-    level: "info",
-    message: "Database connection established",
-  },
-  {
-    id: "3",
-    timestamp: new Date(Date.now() - 900000),
-    level: "warn",
-    message: "High memory usage detected",
-  },
-];
+// const mockLogs: LogEntry[] = [
+//   {
+//     id: "1",
+//     timestamp: new Date(Date.now() - 3600000),
+//     level: "info",
+//     message: "Server started successfully on port 8090",
+//   },
+//   {
+//     id: "2",
+//     timestamp: new Date(Date.now() - 1800000),
+//     level: "info",
+//     message: "Database connection established",
+//   },
+//   {
+//     id: "3",
+//     timestamp: new Date(Date.now() - 900000),
+//     level: "warn",
+//     message: "High memory usage detected",
+//   },
+// ];
 
 const initialProjects: PocketBaseProject[] = [
   {
