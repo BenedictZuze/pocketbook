@@ -69,7 +69,8 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             start_pocketbase_instance,
-            stop_pocketbase_instance
+            stop_pocketbase_instance,
+            resume_pocketbase_instance,
         ])
         .build(tauri::generate_context!())
         .expect("error while building tauri application")
