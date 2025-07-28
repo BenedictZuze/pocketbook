@@ -12,13 +12,14 @@ impl ProjectManager {
     }
 
     pub async fn start_project(&self, project: PocketBaseProject) -> Result<String, String> {
-        let create_response = self
-            .client
-            .records("projects")
-            .create(project)
-            .call()
-            .unwrap();
-        Ok(create_response.id)
+        let create_response = self.client.records("projects").create(project).call();
+        match create_response {
+            Ok(response) => return Ok(response.id),
+            Err(err) => {
+                println!("Failed to create project: {}", err);
+                return Err(format!("Failed to create project: {}", err));
+            }
+        };
     }
 
     pub async fn stop_project(&self, project_name: String) -> Result<String, String> {
