@@ -27,9 +27,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
   const toggleProjectStatus = async () => {
     if (project.status === "running") {
-      await stopProject(project.name);
+      await stopProject(project.id);
     } else {
-      await resumeProject(project.name);
+      await resumeProject(project.id);
     }
     setProjects(
       projects.map((p) =>
