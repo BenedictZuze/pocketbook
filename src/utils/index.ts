@@ -25,9 +25,11 @@ export const createProject = async (
     port: getNextAvailablePort(existingProjects),
     status: "stopped",
     isHealthy: false,
+    pid: "",
     dataDirectory: data.dataDirectory,
     createdAt: new Date(),
-    logs: [],
+    lastStarted: new Date(),
+    // logs: [],
   };
 };
 

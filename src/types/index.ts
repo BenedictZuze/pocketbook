@@ -4,10 +4,11 @@ export interface PocketBaseProject {
   port: number;
   status: "running" | "stopped";
   isHealthy: boolean;
+  pid: string;
   dataDirectory?: string;
   createdAt: Date;
   lastStarted?: Date;
-  logs: LogEntry[];
+  // logs: LogEntry[];
 }
 
 export interface LogEntry {

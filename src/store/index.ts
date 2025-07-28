@@ -31,10 +31,11 @@ const initialProjects: PocketBaseProject[] = [
     port: 8090,
     status: "running",
     isHealthy: true,
+    pid: "12345",
     dataDirectory: "/data/ecommerce",
     createdAt: new Date(Date.now() - 86400000 * 7),
     lastStarted: new Date(Date.now() - 3600000),
-    logs: mockLogs,
+    // logs: mockLogs,
   },
   {
     id: "2",
@@ -42,9 +43,10 @@ const initialProjects: PocketBaseProject[] = [
     port: 8091,
     status: "stopped",
     isHealthy: false,
+    pid: "12345",
     dataDirectory: "/data/blog",
     createdAt: new Date(Date.now() - 86400000 * 3),
-    logs: [],
+    // logs: [],
   },
   {
     id: "3",
@@ -52,9 +54,10 @@ const initialProjects: PocketBaseProject[] = [
     port: 8092,
     status: "running",
     isHealthy: true,
+    pid: "12345",
     createdAt: new Date(Date.now() - 86400000),
     lastStarted: new Date(Date.now() - 1800000),
-    logs: mockLogs.slice(0, 2),
+    // logs: mockLogs.slice(0, 2),
   },
 ];
 
