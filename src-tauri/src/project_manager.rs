@@ -30,7 +30,7 @@ impl ProjectManager {
             .call::<PocketBaseProject>()
             .unwrap();
         project.status = ProjectStatus::Stopped;
-        Ok(project.id)
+        Ok(project.name.clone())
     }
 
     pub async fn list_projects(&self) -> Result<Vec<PocketBaseProject>, String> {
