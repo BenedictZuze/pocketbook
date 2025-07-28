@@ -146,3 +146,32 @@ async fn stop_pocketbase_instance(
     }
     Ok(())
 }
+
+#[tauri::command]
+async fn resume_pocketbase_instance(
+    app_handle: AppHandle,
+    project_name: String,
+) -> Result<(), String> {
+    let project_manager = app_handle.state::<ProjectManager>();
+    let (data_dir, port) = project_manager
+        .get_project(project_name.clone())
+        .await
+        .map_err(|e| e.to_string())
+        .unwrap();
+    let sidecar = app_handle.shell().sidecar("pocketbase").unwrap().args([
+        "serve",
+        "--dir",
+        data_dir.as_str(),
+        "--http",
+        format!("127.0.0.1:{}", port).as_str(),
+    ]);
+    println!("Starting PocketBase instance: {:?}", sidecar);
+    let (mut _rx, child) = sidecar.spawn().unwrap();
+    let pid = child.pid().to_string();
+    project_manager
+        .resume_project(project_name, pid)
+        .await
+        .map_err(|e| e.to_string())
+        .unwrap();
+    Ok(())
+}
