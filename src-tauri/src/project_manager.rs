@@ -30,7 +30,7 @@ impl ProjectManager {
             .call::<PocketBaseProject>()
             .unwrap();
         project.status = ProjectStatus::Stopped;
-        Ok(project.name.clone())
+        Ok(project.pid.clone())
     }
 
     pub async fn resume_project(&self, project_name: String) -> Result<String, String> {

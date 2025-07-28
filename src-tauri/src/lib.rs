@@ -5,6 +5,7 @@ use tauri_plugin_shell::process::{CommandChild, CommandEvent};
 use tauri_plugin_shell::ShellExt;
 pub mod project_manager;
 pub mod types;
+pub mod utils;
 use crate::project_manager::ProjectManager;
 use crate::types::{PocketBaseProject, ProjectStatus};
 use pocketbase_sdk::client::Client as PocketBaseClient;
@@ -114,6 +115,20 @@ async fn start_pocketbase_instance(
     };
     project_manager
         .start_project(project)
+        .await
+        .map_err(|e| e.to_string())
+        .unwrap();
+    Ok(())
+}
+
+#[tauri::command]
+async fn stop_pocketbase_instance(
+    app_handle: AppHandle,
+    project_name: String,
+) -> Result<(), String> {
+    let project_manager = app_handle.state::<ProjectManager>();
+    let pid = project_manager
+        .stop_project(project_name)
         .await
         .map_err(|e| e.to_string())
         .unwrap();
