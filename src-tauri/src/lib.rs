@@ -154,15 +154,20 @@ async fn resume_pocketbase_instance(
     project_name: String,
 ) -> Result<(), String> {
     let project_manager = app_handle.state::<ProjectManager>();
-    let (data_dir, port) = project_manager
+    let port = project_manager
         .get_project(project_name.clone())
         .await
         .map_err(|e| e.to_string())
         .unwrap();
+    let data_dir = app_handle
+        .path()
+        .app_data_dir()
+        .unwrap()
+        .join(format!("pb_data/{}", project_name.clone()));
     let sidecar = app_handle.shell().sidecar("pocketbase").unwrap().args([
         "serve",
         "--dir",
-        data_dir.as_str(),
+        data_dir.to_str().unwrap(),
         "--http",
         format!("127.0.0.1:{}", port).as_str(),
     ]);
