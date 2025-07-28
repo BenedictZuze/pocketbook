@@ -8,6 +8,7 @@ pub struct PocketBaseProject {
     pub port: u16,
     pub status: ProjectStatus,
     pub is_healthy: bool,
+    pub pid: String,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_directory: Option<String>,

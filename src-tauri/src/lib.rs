@@ -99,13 +99,14 @@ async fn start_pocketbase_instance(
         format!("127.0.0.1:{}", port).as_str(),
     ]);
     println!("Starting PocketBase instance: {:?}", sidecar);
-    let (mut _rx, mut _child) = sidecar.spawn().unwrap();
+    let (mut _rx, child) = sidecar.spawn().unwrap();
     let project_manager = app_handle.state::<ProjectManager>();
     let project = PocketBaseProject {
         name: project_name.clone(),
         port,
         status: ProjectStatus::Running,
         is_healthy: true,
+        pid: child.pid().to_string(),
         data_directory: Some(data_dir.to_str().unwrap().to_string()),
         created_at: chrono::Utc::now(),
         last_started: None,

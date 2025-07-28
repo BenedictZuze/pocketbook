@@ -33,6 +33,17 @@ impl ProjectManager {
         Ok(project.name.clone())
     }
 
+    pub async fn resume_project(&self, project_name: String) -> Result<String, String> {
+        let mut project = self
+            .client
+            .records("projects")
+            .view(&project_name)
+            .call::<PocketBaseProject>()
+            .unwrap();
+        project.status = ProjectStatus::Stopped;
+        Ok(project.pid.clone())
+    }
+
     pub async fn list_projects(&self) -> Result<Vec<PocketBaseProject>, String> {
         let projects = self
             .client
