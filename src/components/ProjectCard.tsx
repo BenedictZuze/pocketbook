@@ -11,7 +11,12 @@ import {
 } from "lucide-react";
 import { PocketBaseProject } from "../types";
 import { projectsAtom } from "../store";
-import { formatDate, getHealthColor } from "../utils";
+import {
+  formatDate,
+  getHealthColor,
+  resumeProject,
+  stopProject,
+} from "../utils";
 
 interface ProjectCardProps {
   project: PocketBaseProject;
@@ -20,7 +25,12 @@ interface ProjectCardProps {
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const [projects, setProjects] = useAtom(projectsAtom);
 
-  const toggleProjectStatus = () => {
+  const toggleProjectStatus = async () => {
+    if (project.status === "running") {
+      await stopProject(project.name);
+    } else {
+      await resumeProject(project.name);
+    }
     setProjects(
       projects.map((p) =>
         p.id === project.id
