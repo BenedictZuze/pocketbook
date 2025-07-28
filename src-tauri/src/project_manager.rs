@@ -33,7 +33,11 @@ impl ProjectManager {
         Ok(project.pid.clone())
     }
 
-    pub async fn resume_project(&self, project_name: String) -> Result<String, String> {
+    pub async fn resume_project(
+        &self,
+        project_name: String,
+        pid: String,
+    ) -> Result<(String, String, String), String> {
         let mut project = self
             .client
             .records("projects")
@@ -41,7 +45,16 @@ impl ProjectManager {
             .call::<PocketBaseProject>()
             .unwrap();
         project.status = ProjectStatus::Running;
-        Ok(project.pid.clone())
+        project.pid = pid;
+        self.client
+            .records("projects")
+            .update(&project_name, project.clone())
+            .call()
+            .unwrap();
+        let pid = project.clone().pid.clone();
+        let data_dir = project.clone().data_directory.clone().unwrap_or_default();
+        let port = project.clone().port.to_string();
+        Ok((pid, data_dir, port))
     }
 
     pub async fn list_projects(&self) -> Result<Vec<PocketBaseProject>, String> {
