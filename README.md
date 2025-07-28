@@ -8,14 +8,14 @@ Think of it as a GUI-based orchestrator for PocketBase — spin up, manage, and 
 
 ## ✨ Features
 
-> ✅ = done • 🛠️ = planned / in progress
+> ✅ = done / stable enough for testing • 🛠️ = planned / in progress
 
 - ✅ Embedded PocketBase (via sidecar) using Tauri
 - ✅ Master instance of PocketBase used as controller/state manager
-- 🛠️ Start/stop multiple PocketBase instances
-- 🛠️ Automatic free port detection for new instances
+- ✅ Start/stop multiple PocketBase instances
+- ✅ Automatic free port detection for new instances
 - 🛠️ Persistent instance metadata management using the master PocketBase
-- 🛠️ GUI interface to:
+- ✅ GUI interface to:
   - Add new PocketBase instances
   - View active/inactive instances
   - Control instances (start/stop/restart)
@@ -76,10 +76,10 @@ Check out the [Discussions](https://github.com/BenedictZuze/pocketbook/discussio
 ## ✅ Roadmap / Feature Checklist
 
 - [x] PocketBase sidecar implementation
-- [ ] GUI to view/manage instances
-- [ ] Auto port assignment for instances
-- [ ] Start/stop/restart instance control
-- [ ] Store instance metadata in master PocketBase
+- [x] GUI to view/manage instances
+- [x] Auto port assignment for instances
+- [x] Start/stop/restart instance control
+- [x] Store instance metadata in master PocketBase
 - [ ] Embed log viewer in the GUI
 - [ ] Cross-platform testing
 - [ ] Export/import instance configurations
