@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useLocation } from "wouter";
-import { projectsAtom } from "../store";
+import { pbAtom, projectsAtom } from "../store";
 import { createProject } from "../utils";
-import { NewProjectData } from "../types";
+import { NewProjectData, PocketBaseProject } from "../types";
 
 export const NewProject: React.FC = () => {
+  const db = useAtomValue(pbAtom);
   const [projects, setProjects] = useAtom(projectsAtom);
   const [, setLocation] = useLocation();
   const [formData, setFormData] = useState<NewProjectData>({
@@ -38,8 +39,11 @@ export const NewProject: React.FC = () => {
 
     const newProject = await createProject(formData, projects);
     console.log(newProject);
+    let newProjects = await db
+      .collection("projects")
+      .getFullList<PocketBaseProject>();
 
-    setProjects([...projects, newProject]);
+    setProjects(newProjects);
     setLocation("/");
   };
 
