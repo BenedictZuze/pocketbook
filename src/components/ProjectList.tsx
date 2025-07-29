@@ -16,6 +16,9 @@ export const ProjectList: React.FC = () => {
           <p className="text-gray-500 mb-6">
             Create your first PocketBase project to get started.
           </p>
+          <p className="text-gray-500 mb-6">
+            Force Refresh with <code>Ctrl + Shift + R</code>
+          </p>
         </div>
       </div>
     );
