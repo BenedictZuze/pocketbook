@@ -30,6 +30,11 @@ impl ProjectManager {
             .call::<PocketBaseProject>()
             .unwrap();
         project.status = ProjectStatus::Stopped;
+        self.client
+            .records("projects")
+            .update(&project_name, project.clone())
+            .call()
+            .unwrap();
         Ok(project.pid.clone())
     }
 
