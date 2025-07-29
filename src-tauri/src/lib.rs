@@ -72,11 +72,20 @@ pub fn run() {
                         admin_password.as_str(),
                     )
                     .unwrap();
-                let is_projects_collection_exists = admin_client.records("projects").name;
-                println!(
-                    "Checking if projects collection exists: {}",
-                    is_projects_collection_exists
-                );
+                let is_projects_collection_exists = admin_client
+                    .records("projects")
+                    .list()
+                    .call::<PocketBaseProject>();
+                match is_projects_collection_exists {
+                    Ok(_collections) => {
+                        println!("Projects collection already exists.");
+                        return;
+                    }
+                    Err(e) => {
+                        println!("Error checking projects collection: {}", e);
+                        return;
+                    }
+                };
                 // println!("Creating projects collection...");
                 // let admin_token = admin_client.auth_token.unwrap();
                 // create_projects_collection(&admin_token)
