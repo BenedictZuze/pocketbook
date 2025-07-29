@@ -105,7 +105,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             <div className="sm:col-span-2">
               <p className="text-sm text-gray-500">Created</p>
               <p className="text-sm font-medium text-gray-900">
-                {formatDate(project.createdAt)}
+                {formatDate(new Date(project.createdAt))}
               </p>
             </div>
             {project.lastStarted && (
