@@ -40,6 +40,8 @@ pub fn run() {
                     "upsert",
                     email.as_str(),
                     password.as_str(),
+                    "--dir",
+                    data_dir.to_str().unwrap(),
                 ]);
                 let (mut rx, _upsert_proc) = upsert_cmd
                     .spawn()
