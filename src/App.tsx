@@ -4,6 +4,7 @@ import { Layout } from "./components/Layout";
 import { Provider } from "jotai";
 import { NewProject } from "./pages/NewProject";
 import { ProjectDetails } from "./pages/ProjectDetails";
+import { Splashscreen } from "./pages/Splashscreen";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Route path="/" component={Home} />
             <Route path="/new" component={NewProject} />
             <Route path="/project/:id" component={ProjectDetails} />
+            <Route path="/splashscreen" component={Splashscreen} />
             <Route>
               <div className="text-center py-12">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
