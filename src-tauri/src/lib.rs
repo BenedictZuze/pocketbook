@@ -30,6 +30,21 @@ pub fn run() {
                     .join("pb_data/master");
                 std::fs::create_dir_all(&data_dir).ok();
                 println!("Using PocketBase data directory: {:?}", data_dir);
+
+                let email =
+                    std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
+                let password =
+                    std::env::var("MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
+                let upsert_cmd = app_handle.shell().sidecar("pocketbase").unwrap().args([
+                    "superuser",
+                    "upsert",
+                    email.as_str(),
+                    password.as_str(),
+                ]);
+                let (_rx, _upsert_proc) = upsert_cmd
+                    .spawn()
+                    .expect("Failed to spawn superuser upsert");
+
                 let sidecar = app_handle.shell().sidecar("pocketbase").unwrap().args([
                     "serve",
                     "--dir",
