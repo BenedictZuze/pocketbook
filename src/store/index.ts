@@ -63,7 +63,7 @@ const initialProjects: PocketBaseProject[] = [
 
 const pb = new PocketBase("http://127.0.0.1:8090");
 const db = await pb
-  .collection("users")
+  .collection("_superusers")
   .authWithPassword(
     import.meta.env.VITE_MASTER_EMAIL,
     import.meta.env.VITE_MASTER_PASSWORD
