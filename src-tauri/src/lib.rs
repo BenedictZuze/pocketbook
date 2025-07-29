@@ -77,8 +77,14 @@ pub fn run() {
                     .list()
                     .page(1)
                     .per_page(100)
-                    .call()
-                    .unwrap();
+                    .call();
+                let collections = match collections {
+                    Ok(collections) => collections,
+                    Err(err) => {
+                        eprintln!("Failed to list collections: {}", err);
+                        return;
+                    }
+                };
                 if collections.items.iter().any(|c| c.name == "projects") {
                     println!("Projects collection already exists.");
                     return;
