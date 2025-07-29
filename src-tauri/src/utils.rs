@@ -1,3 +1,5 @@
+use reqwest::Client;
+use serde_json::json;
 use std::process::Command;
 
 #[cfg(target_family = "unix")]
@@ -16,5 +18,39 @@ pub fn kill_pid(pid: u32) -> std::io::Result<()> {
         .arg(pid.to_string())
         .arg("/F")
         .status()?;
+    Ok(())
+}
+
+pub async fn create_projects_collection(
+    admin_token: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new();
+
+    let response = client.post("http://localhost:8090/api/collections")
+        .header("Authorization", format!("Bearer {}", admin_token))
+        .json(&json!({
+            "name": "projects",
+            "type": "base",
+            "schema": [
+                { "name": "name", "type": "text", "required": true },
+                { "name": "port", "type": "number", "required": true },
+                { "name": "status", "type": "select", "options": { "values": ["running", "stopped"] }},
+                { "name": "isHealthy", "type": "bool" },
+                { "name": "pid", "type": "text" },
+                { "name": "dataDirectory", "type": "text" },
+                { "name": "createdAt", "type": "date" },
+                { "name": "lastStarted", "type": "date" }
+            ]
+        }))
+        .send()
+        .await?;
+
+    if response.status().is_success() {
+        println!("✅ Collection created.");
+    } else {
+        let err_text = response.text().await?;
+        println!("❌ Failed to create collection: {}", err_text);
+    }
+
     Ok(())
 }
