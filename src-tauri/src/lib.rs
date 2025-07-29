@@ -9,7 +9,7 @@ pub mod types;
 pub mod utils;
 use crate::project_manager::ProjectManager;
 use crate::types::{PocketBaseProject, ProjectStatus};
-use crate::utils::kill_pid;
+use crate::utils::{create_projects_collection, kill_pid};
 
 pub static MASTER_INSTANCE: Lazy<Mutex<Option<CommandChild>>> = Lazy::new(|| Mutex::new(None));
 
@@ -59,12 +59,17 @@ pub fn run() {
             });
 
             // Set up projects collection in PocketBase
-            let admin_email = std::env::var("ADMIN_EMAIL").unwrap();
-            let admin_password = std::env::var("ADMIN_PASSWORD").unwrap();
-            let admin_client = PocketBaseAdmin::new("http://localhost:8090")
-                .auth_with_password(admin_email.as_str(), admin_password.as_str())
-                .unwrap();
-            let admin_token = admin_client.auth_token.unwrap();
+            tauri::async_runtime::spawn(async move {
+                let admin_email = std::env::var("ADMIN_EMAIL").unwrap();
+                let admin_password = std::env::var("ADMIN_PASSWORD").unwrap();
+                let admin_client = PocketBaseAdmin::new("http://localhost:8090")
+                    .auth_with_password(admin_email.as_str(), admin_password.as_str())
+                    .unwrap();
+                let admin_token = admin_client.auth_token.unwrap();
+                create_projects_collection(&admin_token)
+                    .await
+                    .expect("Failed to create projects collection");
+            });
 
             // Authenticate with the master PocketBase instance
             let email = std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
