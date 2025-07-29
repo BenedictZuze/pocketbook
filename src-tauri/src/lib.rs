@@ -125,7 +125,7 @@ pub fn run() {
             let password = std::env::var("MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
             app.manage(ProjectManager::new(
                 PocketBaseClient::new("http://localhost:8090")
-                    .auth_with_password("users", email.as_str(), password.as_str())
+                    .auth_with_password("_superusers", email.as_str(), password.as_str())
                     .unwrap(),
             ));
 
