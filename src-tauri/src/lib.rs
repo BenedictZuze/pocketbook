@@ -72,28 +72,16 @@ pub fn run() {
                         admin_password.as_str(),
                     )
                     .unwrap();
-                let collections = admin_client
-                    .collections()
-                    .list()
-                    .page(1)
-                    .per_page(100)
-                    .call();
-                let collections = match collections {
-                    Ok(collections) => collections,
-                    Err(err) => {
-                        eprintln!("Failed to list collections: {}", err);
-                        return;
-                    }
-                };
-                if collections.items.iter().any(|c| c.name == "projects") {
-                    println!("Projects collection already exists.");
-                    return;
-                }
-                println!("Creating projects collection...");
-                let admin_token = admin_client.auth_token.unwrap();
-                create_projects_collection(&admin_token)
-                    .await
-                    .expect("Failed to create projects collection");
+                let is_projects_collection_exists = admin_client.records("projects").name;
+                println!(
+                    "Checking if projects collection exists: {}",
+                    is_projects_collection_exists
+                );
+                // println!("Creating projects collection...");
+                // let admin_token = admin_client.auth_token.unwrap();
+                // create_projects_collection(&admin_token)
+                //     .await
+                //     .expect("Failed to create projects collection");
             });
 
             // Authenticate with the master PocketBase instance
