@@ -26,21 +26,121 @@ pub async fn create_projects_collection(
 ) -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new();
 
-    let response = client.post("http://localhost:8090/api/collections")
+    let response = client
+        .post("http://localhost:8090/api/collections")
         .header("Authorization", format!("Bearer {}", admin_token))
         .json(&json!({
             "name": "projects",
             "type": "base",
             "fields": [
-                { "name": "name", "type": "text", "required": true },
-                { "name": "port", "type": "number", "required": true },
-                { "name": "status", "type": "select", "options": { "values": ["running", "stopped"] }, "required": false },
-                { "name": "isHealthy", "type": "bool", "required": false },
-                { "name": "pid", "type": "text", "required": true },
-                { "name": "dataDirectory", "type": "text", "required": true },
-                { "name": "createdAt", "type": "autodate", "required": false, "onCreate": true },
-                { "name": "lastStarted", "type": "autodate", "required": false, "onCreate": true, "onUpdate": true }
-            ]
+            {
+                "autogeneratePattern": "",
+                "hidden": false,
+                "max": 0,
+                "min": 0,
+                "name": "name",
+                "pattern": "",
+                "presentable": false,
+                "primaryKey": false,
+                "required": true,
+                "system": false,
+                "type": "text"
+            },
+            {
+                "hidden": false,
+                "max": null,
+                "min": null,
+                "name": "port",
+                "onlyInt": true,
+                "presentable": false,
+                "required": true,
+                "system": false,
+                "type": "number"
+            },
+            {
+                "hidden": false,
+                "maxSelect": 1,
+                "name": "status",
+                "presentable": false,
+                "required": false,
+                "system": false,
+                "type": "select",
+                "values": [
+                    "running",
+                    "stopped"
+                ]
+            },
+            {
+                "hidden": false,
+                "name": "isHealthy",
+                "presentable": false,
+                "required": false,
+                "system": false,
+                "type": "bool"
+            },
+            {
+                "autogeneratePattern": "",
+                "hidden": false,
+                "max": 0,
+                "min": 0,
+                "name": "pid",
+                "pattern": "",
+                "presentable": false,
+                "primaryKey": false,
+                "required": true,
+                "system": false,
+                "type": "text"
+            },
+            {
+                "autogeneratePattern": "",
+                "hidden": false,
+                "max": 0,
+                "min": 0,
+                "name": "dataDirectory",
+                "pattern": "",
+                "presentable": false,
+                "primaryKey": false,
+                "required": true,
+                "system": false,
+                "type": "text"
+            },
+            {
+                "hidden": false,
+                "name": "created",
+                "onCreate": true,
+                "onUpdate": false,
+                "presentable": false,
+                "system": false,
+                "type": "autodate"
+            },
+            {
+                "hidden": false,
+                "name": "updated",
+                "onCreate": true,
+                "onUpdate": true,
+                "presentable": false,
+                "system": false,
+                "type": "autodate"
+            },
+            {
+                "hidden": false,
+                "name": "createdAt",
+                "onCreate": true,
+                "onUpdate": false,
+                "presentable": false,
+                "system": false,
+                "type": "autodate"
+            },
+            {
+                "hidden": false,
+                "name": "lastStarted",
+                "onCreate": true,
+                "onUpdate": true,
+                "presentable": false,
+                "system": false,
+                "type": "autodate"
+            }
+        ],
         }))
         .send()
         .await?;
