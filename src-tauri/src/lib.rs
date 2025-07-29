@@ -72,25 +72,23 @@ pub fn run() {
                         admin_password.as_str(),
                     )
                     .unwrap();
-                let is_projects_collection_exists = admin_client
+                let projects_collection = admin_client
                     .records("projects")
                     .list()
                     .call::<PocketBaseProject>();
-                match is_projects_collection_exists {
-                    Ok(_collections) => {
-                        println!("Projects collection already exists.");
-                        return;
+                if let Err(err) = projects_collection {
+                    let err = err.to_string();
+                    if err.contains("status code 404") {
+                        println!("Projects collection not found, creating...");
+                        let admin_token = admin_client.auth_token.unwrap();
+                        create_projects_collection(&admin_token)
+                            .await
+                            .expect("Failed to create projects collection");
+                    } else {
+                        eprintln!("Error checking projects collection: {}", err);
                     }
-                    Err(e) => {
-                        println!("Error checking projects collection: {}", e);
-                        return;
-                    }
-                };
-                // println!("Creating projects collection...");
-                // let admin_token = admin_client.auth_token.unwrap();
-                // create_projects_collection(&admin_token)
-                //     .await
-                //     .expect("Failed to create projects collection");
+                }
+                println!("Projects collection is ready.");
             });
 
             // Authenticate with the master PocketBase instance
