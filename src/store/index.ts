@@ -74,6 +74,8 @@ export const dbAtom = atom(db);
 const initialDbProjects = await pb
   .collection("projects")
   .getFullList<PocketBaseProject>();
+console.log("Initial projects from DB:", initialDbProjects);
+
 export const projectsAtom = atom<PocketBaseProject[]>(
   initialDbProjects || initialProjects
 );
