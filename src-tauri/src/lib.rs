@@ -1,5 +1,5 @@
 use once_cell::sync::Lazy;
-use pocketbase_sdk::{admin::Admin as PocketBaseAdmin, client::Client as PocketBaseClient};
+use pocketbase_sdk::client::Client as PocketBaseClient;
 use std::sync::Mutex;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
@@ -65,8 +65,12 @@ pub fn run() {
                     std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
                 let admin_password =
                     std::env::var("MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
-                let admin_client = PocketBaseAdmin::new("http://localhost:8090")
-                    .auth_with_password(admin_email.as_str(), admin_password.as_str())
+                let admin_client = PocketBaseClient::new("http://localhost:8090")
+                    .auth_with_password(
+                        "_superusers",
+                        admin_email.as_str(),
+                        admin_password.as_str(),
+                    )
                     .unwrap();
                 let collections = admin_client.collections().list().call().unwrap();
                 if collections.items.iter().any(|c| c.name == "projects") {
