@@ -41,9 +41,23 @@ pub fn run() {
                     email.as_str(),
                     password.as_str(),
                 ]);
-                let (_rx, _upsert_proc) = upsert_cmd
+                let (mut rx, _upsert_proc) = upsert_cmd
                     .spawn()
                     .expect("Failed to spawn superuser upsert");
+
+                while let Some(event) = rx.recv().await {
+                    match event {
+                        CommandEvent::Stdout(line) => {
+                            println!("[PB STDOUT] {}", String::from_utf8_lossy(&line));
+                        }
+                        CommandEvent::Stderr(line) => {
+                            eprintln!("[PB STDERR] {}", String::from_utf8_lossy(&line));
+                        }
+                        other => {
+                            println!("[PB EVENT] {:?}", other);
+                        }
+                    }
+                }
 
                 let sidecar = app_handle.shell().sidecar("pocketbase").unwrap().args([
                     "serve",
