@@ -33,6 +33,11 @@
     ],
     "externalBin": [
       "binaries/pocketbase"
-    ]
+    ],
+      "windows": {
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
+      }
+    }
   }
 }
