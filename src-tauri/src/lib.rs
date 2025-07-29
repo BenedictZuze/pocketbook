@@ -72,7 +72,13 @@ pub fn run() {
                         admin_password.as_str(),
                     )
                     .unwrap();
-                let collections = admin_client.collections().list().call().unwrap();
+                let collections = admin_client
+                    .collections()
+                    .list()
+                    .page(1)
+                    .per_page(100)
+                    .call()
+                    .unwrap();
                 if collections.items.iter().any(|c| c.name == "projects") {
                     println!("Projects collection already exists.");
                     return;
