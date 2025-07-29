@@ -57,13 +57,13 @@ pub fn run() {
                     }
                 } // No need to wait or kill here
             });
-            let email = std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
-            let password = std::env::var("MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
-            app.manage(ProjectManager::new(
-                PocketBaseClient::new("http://localhost:8090")
-                    .auth_with_password("users", email.as_str(), password.as_str())
-                    .unwrap(),
-            ));
+            // let email = std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
+            // let password = std::env::var("MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
+            // app.manage(ProjectManager::new(
+            //     PocketBaseClient::new("http://localhost:8090")
+            //         .auth_with_password("users", email.as_str(), password.as_str())
+            //         .unwrap(),
+            // ));
 
             Ok(())
         })
