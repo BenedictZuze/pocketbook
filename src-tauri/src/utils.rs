@@ -38,8 +38,8 @@ pub async fn create_projects_collection(
                 { "name": "isHealthy", "type": "bool", "required": false },
                 { "name": "pid", "type": "text", "required": true },
                 { "name": "dataDirectory", "type": "text", "required": true },
-                { "name": "createdAt", "type": "autodate", "required": false },
-                { "name": "lastStarted", "type": "autodate", "required": false }
+                { "name": "createdAt", "type": "autodate", "required": false, "onCreate": true },
+                { "name": "lastStarted", "type": "autodate", "required": false, "onCreate": true, "onUpdate": true }
             ]
         }))
         .send()
