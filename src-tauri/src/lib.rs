@@ -65,6 +65,12 @@ pub fn run() {
                 let admin_client = PocketBaseAdmin::new("http://localhost:8090")
                     .auth_with_password(admin_email.as_str(), admin_password.as_str())
                     .unwrap();
+                let collections = admin_client.collections().list().call().unwrap();
+                if collections.items.iter().any(|c| c.name == "projects") {
+                    println!("Projects collection already exists.");
+                    return;
+                }
+                println!("Creating projects collection...");
                 let admin_token = admin_client.auth_token.unwrap();
                 create_projects_collection(&admin_token)
                     .await
