@@ -58,6 +58,33 @@ pnpm install
 pnpm tauri dev
 ```
 
+Automatic schema/collection creation is on my TODO. However, here is a manual work-around.
+
+1. On first run you are required to create a super-user account - the credentials should match the values that will be in the .env (check `.env.example`).
+
+2. Next create a collection called `projects` with the following schema:
+
+```json
+{
+  "name": "projects",
+  "type": "base",
+  "schema": [
+    { "name": "name", "type": "text", "required": true },
+    { "name": "port", "type": "number", "required": true },
+    {
+      "name": "status",
+      "type": "select",
+      "options": { "values": ["running", "stopped"] }
+    },
+    { "name": "isHealthy", "type": "bool" },
+    { "name": "dataDirectory", "type": "text" },
+    { "name": "pid", "type": "text" },
+    { "name": "createdAt", "type": "date" },
+    { "name": "lastStarted", "type": "date" }
+  ]
+}
+```
+
 > 💡 Ensure you have Rust, Node, and Tauri CLI installed.
 
 ---
