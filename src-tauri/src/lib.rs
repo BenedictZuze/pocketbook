@@ -1,5 +1,5 @@
 use once_cell::sync::Lazy;
-use pocketbase_sdk::client::Client as PocketBaseClient;
+use pocketbase_sdk::{admin::Admin as PocketBaseAdmin, client::Client as PocketBaseClient};
 use std::sync::Mutex;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
@@ -57,6 +57,16 @@ pub fn run() {
                     }
                 } // No need to wait or kill here
             });
+
+            // Set up projects collection in PocketBase
+            let admin_email = std::env::var("ADMIN_EMAIL").unwrap();
+            let admin_password = std::env::var("ADMIN_PASSWORD").unwrap();
+            let admin_client = PocketBaseAdmin::new("http://localhost:8090")
+                .auth_with_password(admin_email.as_str(), admin_password.as_str())
+                .unwrap();
+            let admin_token = admin_client.auth_token.unwrap();
+
+            // Authenticate with the master PocketBase instance
             let email = std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
             let password = std::env::var("MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
             app.manage(ProjectManager::new(
