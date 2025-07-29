@@ -34,12 +34,12 @@ pub async fn create_projects_collection(
             "fields": [
                 { "name": "name", "type": "text", "required": true },
                 { "name": "port", "type": "number", "required": true },
-                { "name": "status", "type": "select", "options": { "values": ["running", "stopped"] }},
-                { "name": "isHealthy", "type": "bool" },
-                { "name": "pid", "type": "text" },
-                { "name": "dataDirectory", "type": "text" },
-                { "name": "createdAt", "type": "date" },
-                { "name": "lastStarted", "type": "date" }
+                { "name": "status", "type": "select", "options": { "values": ["running", "stopped"] }, "required": false },
+                { "name": "isHealthy", "type": "bool", "required": false },
+                { "name": "pid", "type": "text", "required": true },
+                { "name": "dataDirectory", "type": "text", "required": true },
+                { "name": "createdAt", "type": "autodate", "required": false },
+                { "name": "lastStarted", "type": "autodate", "required": false }
             ]
         }))
         .send()
