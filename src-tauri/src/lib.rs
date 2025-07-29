@@ -60,8 +60,10 @@ pub fn run() {
 
             // Set up projects collection in PocketBase
             tauri::async_runtime::spawn(async move {
-                let admin_email = std::env::var("ADMIN_EMAIL").unwrap();
-                let admin_password = std::env::var("ADMIN_PASSWORD").unwrap();
+                let admin_email =
+                    std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
+                let admin_password =
+                    std::env::var("MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
                 let admin_client = PocketBaseAdmin::new("http://localhost:8090")
                     .auth_with_password(admin_email.as_str(), admin_password.as_str())
                     .unwrap();
