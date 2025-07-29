@@ -64,7 +64,7 @@ impl ProjectManager {
             .view(&project_name)
             .call::<PocketBaseProject>()
             .unwrap();
-        Ok(project.pid)
+        Ok(project.port.to_string())
     }
 
     pub async fn list_projects(&self) -> Result<Vec<PocketBaseProject>, String> {
