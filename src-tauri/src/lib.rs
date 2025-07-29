@@ -128,7 +128,10 @@ pub fn run() {
                     .auth_with_password("_superusers", email.as_str(), password.as_str())
                     .unwrap(),
             ));
-
+            let splash_window = app.get_webview_window("splashscreen").unwrap();
+            let main_window = app.get_webview_window("main").unwrap();
+            splash_window.close().unwrap();
+            main_window.show().unwrap();
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

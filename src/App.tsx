@@ -10,12 +10,12 @@ function App() {
   return (
     <Provider>
       <Router>
-        <Layout>
-          <Switch>
+        <Switch>
+          <Route path="/splashscreen" component={Splashscreen} />
+          <Layout>
             <Route path="/" component={Home} />
             <Route path="/new" component={NewProject} />
             <Route path="/project/:id" component={ProjectDetails} />
-            <Route path="/splashscreen" component={Splashscreen} />
             <Route>
               <div className="text-center py-12">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -26,8 +26,8 @@ function App() {
                 </p>
               </div>
             </Route>
-          </Switch>
-        </Layout>
+          </Layout>
+        </Switch>
       </Router>
     </Provider>
   );
