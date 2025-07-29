@@ -23,7 +23,8 @@
             "--http",
             {
               "validator": "\\S+"
-            }
+            },
+            "superuser upsert"
           ]
         }
       ]

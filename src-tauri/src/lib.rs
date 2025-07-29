@@ -30,7 +30,6 @@ pub fn run() {
                     .join("pb_data/master");
                 std::fs::create_dir_all(&data_dir).ok();
                 println!("Using PocketBase data directory: {:?}", data_dir);
-
                 let sidecar = app_handle.shell().sidecar("pocketbase").unwrap().args([
                     "serve",
                     "--dir",
