@@ -97,7 +97,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             {project.dataDirectory && (
               <div className="sm:col-span-2">
                 <p className="text-sm text-gray-500">Data Directory</p>
-                <p className="text-sm font-medium text-gray-900 font-mono text-wrap">
+                <p className="text-sm font-medium text-gray-900 font-mono break-words whitespace-normal">
                   {project.dataDirectory}
                 </p>
               </div>
