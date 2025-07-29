@@ -24,7 +24,8 @@
             {
               "validator": "\\S+"
             },
-            "superuser upsert"
+            "superuser",
+            "upsert"
           ]
         }
       ]
