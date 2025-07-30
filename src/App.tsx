@@ -10,9 +10,9 @@ function App() {
   return (
     <Provider>
       <Router>
-        <Switch>
-          <Route path="/splashscreen" component={Splashscreen} />
-          <Layout>
+        <Layout>
+          <Switch>
+            <Route path="/splashscreen" component={Splashscreen} />
             <Route path="/" component={Home} />
             <Route path="/new" component={NewProject} />
             <Route path="/project/:id" component={ProjectDetails} />
@@ -26,8 +26,8 @@ function App() {
                 </p>
               </div>
             </Route>
-          </Layout>
-        </Switch>
+          </Switch>
+        </Layout>
       </Router>
     </Provider>
   );
