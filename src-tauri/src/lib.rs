@@ -1,5 +1,6 @@
 use once_cell::sync::Lazy;
 use pocketbase_sdk::client::Client as PocketBaseClient;
+use std::path::PathBuf;
 use std::sync::Mutex;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
@@ -22,11 +23,15 @@ pub fn run() {
             dotenvy::dotenv().unwrap();
             let app_handle = app.app_handle().clone();
             println!("Starting PocketBase...");
-            let data_dir = app_handle
-                .path()
-                .data_dir()
-                .unwrap()
-                .join("pocketbook/pb_data/master");
+            let path = app_handle.path().data_dir();
+            let data_dir: PathBuf;
+            match path {
+                Ok(path) => data_dir = path.join("pocketbook/pb_data/master"),
+                Err(err) => {
+                    eprintln!("Failed to get data directory path, {}", err);
+                    panic!("Failed to get data directory path");
+                }
+            };
             std::fs::create_dir_all(&data_dir).ok();
             println!("Using PocketBase data directory: {:?}", data_dir);
             tauri::async_runtime::spawn(async move {
