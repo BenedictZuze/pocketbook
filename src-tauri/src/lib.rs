@@ -49,13 +49,13 @@ pub fn run() {
                 while let Some(event) = rx.recv().await {
                     match event {
                         CommandEvent::Stdout(line) => {
-                            println!("[PB STDOUT] {}", String::from_utf8_lossy(&line));
+                            println!("[PB SU STDOUT] {}", String::from_utf8_lossy(&line));
                         }
                         CommandEvent::Stderr(line) => {
-                            eprintln!("[PB STDERR] {}", String::from_utf8_lossy(&line));
+                            eprintln!("[PB SU STDERR] {}", String::from_utf8_lossy(&line));
                         }
                         other => {
-                            println!("[PB EVENT] {:?}", other);
+                            println!("[PB SU EVENT] {:?}", other);
                         }
                     }
                 }
