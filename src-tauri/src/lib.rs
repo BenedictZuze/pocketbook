@@ -22,15 +22,14 @@ pub fn run() {
             dotenvy::dotenv().unwrap();
             let app_handle = app.app_handle().clone();
             println!("Starting PocketBase...");
+            let data_dir = app_handle
+                .path()
+                .data_dir()
+                .unwrap()
+                .join("pocketbook/pb_data/master");
+            std::fs::create_dir_all(&data_dir).ok();
+            println!("Using PocketBase data directory: {:?}", data_dir);
             tauri::async_runtime::spawn(async move {
-                let data_dir = app_handle
-                    .path()
-                    .data_dir()
-                    .unwrap()
-                    .join("pocketbook/pb_data/master");
-                std::fs::create_dir_all(&data_dir).ok();
-                println!("Using PocketBase data directory: {:?}", data_dir);
-
                 let email =
                     std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
                 let password =
