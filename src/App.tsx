@@ -4,7 +4,6 @@ import { Layout } from "./components/Layout";
 import { Provider } from "jotai";
 import { NewProject } from "./pages/NewProject";
 import { ProjectDetails } from "./pages/ProjectDetails";
-import { Splashscreen } from "./pages/Splashscreen";
 
 function App() {
   return (
@@ -12,7 +11,6 @@ function App() {
       <Router>
         <Layout>
           <Switch>
-            <Route path="/splashscreen" component={Splashscreen} />
             <Route path="/" component={Home} />
             <Route path="/new" component={NewProject} />
             <Route path="/project/:id" component={ProjectDetails} />

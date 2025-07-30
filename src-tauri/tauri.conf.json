@@ -14,14 +14,7 @@
       {
         "title": "pocketbook",
         "width": 800,
-        "height": 600,
-        "visible": false
-      },
-      {
-        "label": "splashscreen",
-        "url": "/splashscreen",
-        "width": 600,
-        "height": 300
+        "height": 600
       }
     ],
     "security": {
