@@ -69,7 +69,7 @@ const pb = new PocketBase("http://127.0.0.1:8090");
 //     import.meta.env.VITE_MASTER_PASSWORD
 //   );
 export const pbAtom = atom<PocketBase>(pb);
-// export const dbAtom = atom(db);
+export const dbAtom = atom(null);
 
 // const initialDbProjects = await pb
 //   .collection("projects")
