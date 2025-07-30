@@ -36,9 +36,9 @@ pub fn run() {
             println!("Using PocketBase data directory: {:?}", data_dir);
             tauri::async_runtime::spawn(async move {
                 let email =
-                    std::env::var("VITE_MASTER_EMAIL").unwrap_or("master@example.com".to_string());
+                    std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
                 let password =
-                    std::env::var("VITE_MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
+                    std::env::var("MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
                 let upsert_cmd = app_handle.shell().sidecar("pocketbase").unwrap().args([
                     "superuser",
                     "upsert",
@@ -95,9 +95,9 @@ pub fn run() {
             // Set up projects collection in PocketBase
             tauri::async_runtime::spawn(async move {
                 let admin_email =
-                    std::env::var("VITE_MASTER_EMAIL").unwrap_or("master@example.com".to_string());
+                    std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
                 let admin_password =
-                    std::env::var("VITE_MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
+                    std::env::var("MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
                 let admin_client = PocketBaseClient::new("http://localhost:8090")
                     .auth_with_password(
                         "_superusers",
@@ -125,10 +125,8 @@ pub fn run() {
             });
 
             // Authenticate with the master PocketBase instance
-            let email =
-                std::env::var("VITE_MASTER_EMAIL").unwrap_or("master@example.com".to_string());
-            let password =
-                std::env::var("VITE_MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
+            let email = std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
+            let password = std::env::var("MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
             app.manage(ProjectManager::new(
                 PocketBaseClient::new("http://localhost:8090")
                     .auth_with_password("_superusers", email.as_str(), password.as_str())
