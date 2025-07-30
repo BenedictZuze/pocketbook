@@ -45,6 +45,9 @@
       "webviewInstallMode": {
         "type": "embedBootstrapper"
       }
-    }
+    },
+    "resources": [
+      ".env"
+    ]
   }
 }
