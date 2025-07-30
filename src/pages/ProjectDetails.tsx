@@ -146,14 +146,14 @@ export const ProjectDetails: React.FC = () => {
               <div>
                 <dt className="text-sm text-gray-500">Created</dt>
                 <dd className="text-sm font-medium text-gray-900">
-                  {formatDate(project.createdAt)}
+                  {formatDate(new Date(project.createdAt))}
                 </dd>
               </div>
               {project.lastStarted && (
                 <div>
                   <dt className="text-sm text-gray-500">Last Started</dt>
                   <dd className="text-sm font-medium text-gray-900">
-                    {formatDate(project.lastStarted)}
+                    {formatDate(new Date(project.lastStarted))}
                   </dd>
                 </div>
               )}
