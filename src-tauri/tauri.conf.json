@@ -19,7 +19,9 @@
       },
       {
         "label": "splashscreen",
-        "url": "/splashscreen"
+        "url": "/splashscreen",
+        "width": 800,
+        "height": 300
       }
     ],
     "security": {
