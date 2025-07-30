@@ -60,6 +60,8 @@ pnpm tauri dev
 
 Automatic schema/collection creation is on my TODO. However, here is a manual work-around.
 
+**This has been patched and is no longer required - I have left this here in case anyone wants to manually changes somethings.**
+
 1. On first run you are required to create a super-user account - the credentials should match the values that will be in the .env (check `.env.example`).
 
 2. Next create a collection called `projects` with the following schema:
@@ -74,11 +76,12 @@ Automatic schema/collection creation is on my TODO. However, here is a manual wo
     {
       "name": "status",
       "type": "select",
-      "options": { "values": ["running", "stopped"] }
+      "options": { "values": ["running", "stopped"] },
+      "required": true
     },
     { "name": "isHealthy", "type": "bool" },
-    { "name": "dataDirectory", "type": "text" },
-    { "name": "pid", "type": "text" },
+    { "name": "dataDirectory", "type": "text", "required": true },
+    { "name": "pid", "type": "text", "required": true },
     { "name": "createdAt", "type": "date" },
     { "name": "lastStarted", "type": "date" }
   ]
