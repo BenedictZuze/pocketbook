@@ -14,7 +14,7 @@ Think of it as a GUI-based orchestrator for PocketBase — spin up, manage, and 
 - ✅ Master instance of PocketBase used as controller/state manager
 - ✅ Start/stop multiple PocketBase instances
 - ✅ Automatic free port detection for new instances
-- 🛠️ Persistent instance metadata management using the master PocketBase
+- ✅ Persistent instance metadata management using the master PocketBase
 - ✅ GUI interface to:
   - Add new PocketBase instances
   - View active/inactive instances
