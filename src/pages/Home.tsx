@@ -1,12 +1,13 @@
 import React from "react";
 import { ProjectList } from "../components/ProjectList";
 import { useAtom, useAtomValue } from "jotai";
-import { pbAtom, projectsAtom } from "../store";
+import { dbAtom, pbAtom, projectsAtom } from "../store";
 import { useSingleEffect } from "react-haiku";
 import { PocketBaseProject } from "../types";
 
 export const Home: React.FC = () => {
   const pb = useAtomValue(pbAtom);
+  const [, setDb] = useAtom(dbAtom);
   const [, setProjects] = useAtom(projectsAtom);
   useSingleEffect(() => {
     const fetchProjects = async () => {
@@ -19,7 +20,20 @@ export const Home: React.FC = () => {
         console.error("Failed to fetch projects:", error);
       }
     };
-
+    const authUser = async () => {
+      try {
+        const user = await pb
+          .collection("_superusers")
+          .authWithPassword(
+            import.meta.env.VITE_MASTER_EMAIL,
+            import.meta.env.VITE_MASTER_PASSWORD
+          );
+        setDb(user);
+      } catch (error) {
+        console.error("Failed to auth user:", error);
+      }
+    };
+    authUser();
     fetchProjects();
   });
   return (

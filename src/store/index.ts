@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 import { PocketBaseProject } from "../types";
-import PocketBase from "pocketbase";
+import PocketBase, { RecordAuthResponse, RecordModel } from "pocketbase";
 
 // Mock data for demonstration
 // const mockLogs: LogEntry[] = [
@@ -62,14 +62,14 @@ import PocketBase from "pocketbase";
 // ];
 
 const pb = new PocketBase("http://127.0.0.1:8090");
-// const db = await pb
-//   .collection("_superusers")
-//   .authWithPassword(
-//     import.meta.env.VITE_MASTER_EMAIL,
-//     import.meta.env.VITE_MASTER_PASSWORD
-//   );
+const db = await pb
+  .collection("_superusers")
+  .authWithPassword(
+    import.meta.env.VITE_MASTER_EMAIL,
+    import.meta.env.VITE_MASTER_PASSWORD
+  );
 export const pbAtom = atom<PocketBase>(pb);
-export const dbAtom = atom(null);
+export const dbAtom = atom<RecordAuthResponse<RecordModel> | null>(null);
 
 // const initialDbProjects = await pb
 //   .collection("projects")
