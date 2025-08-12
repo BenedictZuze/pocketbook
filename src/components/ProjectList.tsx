@@ -2,9 +2,14 @@ import React from "react";
 import { useAtomValue } from "jotai";
 import { projectsAtom } from "../store";
 import { ProjectCard } from "./ProjectCard";
+import { useSingleEffect } from "react-haiku";
 
 export const ProjectList: React.FC = () => {
   const projects = useAtomValue(projectsAtom);
+
+  useSingleEffect(() => {
+    console.log(projects);
+  });
 
   if (projects.length === 0) {
     return (
