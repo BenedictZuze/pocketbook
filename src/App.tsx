@@ -2,13 +2,15 @@ import { useEffect } from "react";
 import { Route, Router, Switch } from "wouter";
 import { Home } from "./pages/Home";
 import { Layout } from "./components/Layout";
-import { Provider, useAtom } from "jotai";
+import { Provider, useAtom, useAtomValue } from "jotai";
 import { NewProject } from "./pages/NewProject";
 import { ProjectDetails } from "./pages/ProjectDetails";
-import { projectsAtom } from "./store";
+import { dbAtom, pbAtom, projectsAtom } from "./store";
 import { listen } from "@tauri-apps/api/event";
 
 function App() {
+  const pb = useAtomValue(pbAtom);
+  const [, setDb] = useAtom(dbAtom);
   const [projects, setProjects] = useAtom(projectsAtom);
 
   useEffect(() => {
