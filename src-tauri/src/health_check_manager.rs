@@ -89,4 +89,16 @@ impl HealthCheckManager {
         handles.clear();
         self.state.write().await.clear();
     }
+
+    /// Get last known health for a project (if available)
+    pub async fn last_known_health(&self, project_id: &str) -> Option<bool> {
+        let state = self.state.read().await;
+        state.get(project_id).cloned()
+    }
+
+    /// Check whether a monitor is running for a given project id
+    pub async fn is_monitor_running(&self, project_id: &str) -> bool {
+        let handles = self.handles.read().await;
+        handles.contains_key(project_id)
+    }
 }
