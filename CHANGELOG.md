@@ -16,3 +16,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Outside closure of port running an instance will cause a mismatch of pid and port running instance in the master instance
   - scan or manually update existing instances in the master instance
+  - on restart this seems to not matter but still a weird issue
