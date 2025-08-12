@@ -2,7 +2,7 @@ use once_cell::sync::Lazy;
 use pocketbase_sdk::client::Client as PocketBaseClient;
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
-use tauri::{AppHandle, Manager};
+use tauri::{AppHandle, Emitter, Manager};
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
 use tauri_plugin_shell::ShellExt;
 pub mod health_check_manager;
@@ -29,6 +29,7 @@ pub fn run() {
         .setup(|app| {
             dotenvy::dotenv().unwrap();
             let app_handle = app.app_handle().clone();
+            let app_handle_clone = app_handle.clone();
             println!("Starting PocketBase...");
             let path = app_handle.path().data_dir();
             let data_dir: PathBuf;
@@ -143,17 +144,21 @@ pub fn run() {
             );
 
             // Initialize HealthCheckManager
-            let health_check_manager =
-                HealthCheckManager::new(Arc::new(move |project_id, is_healthy| {
+            let health_check_manager = HealthCheckManager::new(Arc::new({
+                let app_handle = app_handle_clone.clone();
+                move |project_id, is_healthy| {
                     // This closure runs in the background task context (Tokio)
-                    // Keep it lightweight: emit a Tauri event or enqueue a DB update
-                    // Example: emit Tauri event (you'll need to clone an AppHandle into the closure instead)
-                    // app_handle.emit_all("instance-health", payload).unwrap();
-
+                    // app_handle.emit_all("instance-health-changed", payload).unwrap();
+                    let payload = serde_json::json!({
+                        "pid": project_id,
+                        "is_healthy": is_healthy,
+                    });
+                    app_handle.emit("instance-health-changed", payload).ok();
                     println!("health change: {} -> {}", project_id, is_healthy);
 
                     // TODO: Persist to master PocketBase or update in-memory state.
-                }));
+                }
+            }));
 
             app.manage(AppData {
                 project_manager,
