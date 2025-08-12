@@ -1,14 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ProjectList } from "../components/ProjectList";
 import { useAtom, useAtomValue } from "jotai";
 import { dbAtom, pbAtom, projectsAtom } from "../store";
 import { useSingleEffect } from "react-haiku";
 import { PocketBaseProject } from "../types";
+import { listen } from "@tauri-apps/api/event";
 
 export const Home: React.FC = () => {
   const pb = useAtomValue(pbAtom);
   const [, setDb] = useAtom(dbAtom);
-  const [, setProjects] = useAtom(projectsAtom);
+  const [projects, setProjects] = useAtom(projectsAtom);
+
+  useEffect(() => {
+    const unlistenPromise = listen<{ pid: string; isHealthy: boolean }>(
+      "instance-health-changed",
+      (event) => {
+        console.log("health changed");
+        console.log(event.payload.isHealthy);
+        console.log(event.payload.pid);
+        setProjects(
+          projects.map((p) =>
+            p.pid === event.payload.pid
+              ? { ...p, isHealthy: event.payload.isHealthy }
+              : p
+          )
+        );
+        console.log(projects);
+      }
+    );
+
+    // cleanup
+    return () => {
+      unlistenPromise.then((unlisten) => unlisten());
+    };
+  }, [setProjects]);
+
   useSingleEffect(() => {
     const fetchProjects = async () => {
       try {

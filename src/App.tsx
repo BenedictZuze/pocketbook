@@ -1,42 +1,11 @@
-import { useEffect } from "react";
 import { Route, Router, Switch } from "wouter";
 import { Home } from "./pages/Home";
 import { Layout } from "./components/Layout";
 import { Provider, useAtom, useAtomValue } from "jotai";
 import { NewProject } from "./pages/NewProject";
 import { ProjectDetails } from "./pages/ProjectDetails";
-import { dbAtom, pbAtom, projectsAtom } from "./store";
-import { listen } from "@tauri-apps/api/event";
 
 function App() {
-  const pb = useAtomValue(pbAtom);
-  const [, setDb] = useAtom(dbAtom);
-  const [projects, setProjects] = useAtom(projectsAtom);
-
-  useEffect(() => {
-    const unlistenPromise = listen<{ pid: string; isHealthy: boolean }>(
-      "instance-health-changed",
-      (event) => {
-        console.log("health changed");
-        console.log(event.payload.isHealthy);
-        console.log(event.payload.pid);
-        setProjects(
-          projects.map((p) =>
-            p.pid === event.payload.pid
-              ? { ...p, isHealthy: event.payload.isHealthy }
-              : p
-          )
-        );
-        console.log(projects);
-      }
-    );
-
-    // cleanup
-    return () => {
-      unlistenPromise.then((unlisten) => unlisten());
-    };
-  }, [setProjects]);
-
   return (
     <Provider>
       <Router>
