@@ -168,12 +168,16 @@ pub fn run() {
         ])
         .build(tauri::generate_context!())
         .expect("error while building tauri application")
-        .run(|_app_handle, event| match event {
+        .run(|app_handle: &AppHandle, event| match event {
             tauri::RunEvent::ExitRequested { .. } => {
                 println!("App is exiting, Closing Master Instance...");
                 if let Some(child) = MASTER_INSTANCE.lock().unwrap().take() {
                     let _ = child.kill();
                 }
+                let app_data = app_handle.state::<AppData>();
+                let health_check_manager = app_data.health_check_manager.clone();
+                // health_check_manager.stop_all();
+                return;
             }
             _ => {}
         })
