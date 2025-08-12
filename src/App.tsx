@@ -16,6 +16,8 @@ function App() {
       "instance-health-changed",
       (event) => {
         console.log("health changed");
+        console.log(event.payload.isHealthy);
+        console.log(event.payload.pid);
         setProjects((projects) =>
           projects.map((p) =>
             p.pid === event.payload.pid
