@@ -231,7 +231,9 @@ async fn stop_pocketbase_instance(
     app_handle: AppHandle,
     project_name: String,
 ) -> Result<(), String> {
-    let project_manager = app_handle.state::<ProjectManager>();
+    let app_data = app_handle.state::<AppData>();
+    let project_manager = app_data.project_manager.clone();
+    let health_check_manager = app_data.health_check_manager.clone();
     let pid = project_manager
         .stop_project(project_name)
         .await
@@ -244,7 +246,9 @@ async fn stop_pocketbase_instance(
     if let Err(e) = kill_pid(pid) {
         print!("Failed to stop PocketBase process: {}", e);
         return Err(format!("Failed to stop PocketBase process: {}", e));
-    }
+    };
+    health_check_manager.stop_monitor(&pid.to_string()).await;
+    println!("PocketBase instance stopped successfully.");
     Ok(())
 }
 
@@ -253,7 +257,9 @@ async fn resume_pocketbase_instance(
     app_handle: AppHandle,
     project_name: String,
 ) -> Result<(), String> {
-    let project_manager = app_handle.state::<ProjectManager>();
+    let app_data = app_handle.state::<AppData>();
+    let project_manager = app_data.project_manager.clone();
+    let health_check_manager = app_data.health_check_manager.clone();
     let port = project_manager
         .get_project(project_name.clone())
         .await
