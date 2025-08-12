@@ -80,6 +80,18 @@ impl HealthCheckManager {
         handles.insert(project_id_clone, handle);
     }
 
+    /// Stop monitoring the specified project (if a monitor exists).
+    pub async fn stop_monitor(&self, project_id: &str) {
+        let mut handles = self.handles.write().await;
+        if let Some(handle) = handles.remove(project_id) {
+            // abort the task; this is immediate
+            handle.abort();
+        }
+        // Optionally remove state
+        let mut state = self.state.write().await;
+        state.remove(project_id);
+    }
+
     /// Stop all monitors
     pub async fn stop_all(&self) {
         let mut handles = self.handles.write().await;
