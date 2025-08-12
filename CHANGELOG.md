@@ -11,3 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - v0.1.1 Automatic Health Checks on instances
 - v0.1.1 Viewing instance logs in the GUI
+
+### Bugs
+
+- Outside closure of port running an instance will cause a mismatch of pid and port running instance in the master instance
+  - scan or manually update existing instances in the master instance
