@@ -151,7 +151,7 @@ pub fn run() {
                     // app_handle.emit_all("instance-health-changed", payload).unwrap();
                     let payload = serde_json::json!({
                         "pid": project_id,
-                        "is_healthy": is_healthy,
+                        "isHealthy": is_healthy,
                     });
                     app_handle.emit("instance-health-changed", payload).ok();
                     println!("health change: {} -> {}", project_id, is_healthy);
