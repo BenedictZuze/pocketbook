@@ -2,14 +2,14 @@ import { useEffect } from "react";
 import { Route, Router, Switch } from "wouter";
 import { Home } from "./pages/Home";
 import { Layout } from "./components/Layout";
-import { Provider, useSetAtom } from "jotai";
+import { Provider, useAtom } from "jotai";
 import { NewProject } from "./pages/NewProject";
 import { ProjectDetails } from "./pages/ProjectDetails";
 import { projectsAtom } from "./store";
 import { listen } from "@tauri-apps/api/event";
 
 function App() {
-  const setProjects = useSetAtom(projectsAtom);
+  const [projects, setProjects] = useAtom(projectsAtom);
 
   useEffect(() => {
     const unlistenPromise = listen<{ pid: string; isHealthy: boolean }>(
@@ -25,6 +25,7 @@ function App() {
               : p
           )
         );
+        console.log(projects);
       }
     );
 
