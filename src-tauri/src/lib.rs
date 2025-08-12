@@ -135,8 +135,15 @@ pub fn run() {
             let email = std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
             let password = std::env::var("MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
 
+            // Initialize ProjectManager
+            let project_manager = ProjectManager::new(
+                PocketBaseClient::new("http://localhost:8090")
+                    .auth_with_password("_superusers", email.as_str(), password.as_str())
+                    .unwrap(),
+            );
+
             // Initialize HealthCheckManager
-            let health_manager =
+            let health_check_manager =
                 HealthCheckManager::new(Arc::new(move |project_id, is_healthy| {
                     // This closure runs in the background task context (Tokio)
                     // Keep it lightweight: emit a Tauri event or enqueue a DB update
@@ -148,11 +155,10 @@ pub fn run() {
                     // TODO: Persist to master PocketBase or update in-memory state.
                 }));
 
-            app.manage(ProjectManager::new(
-                PocketBaseClient::new("http://localhost:8090")
-                    .auth_with_password("_superusers", email.as_str(), password.as_str())
-                    .unwrap(),
-            ));
+            app.manage(AppData {
+                project_manager,
+                health_check_manager,
+            });
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
