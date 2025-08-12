@@ -79,4 +79,14 @@ impl HealthCheckManager {
         let mut handles = self.handles.write().await;
         handles.insert(project_id_clone, handle);
     }
+
+    /// Stop all monitors
+    pub async fn stop_all(&self) {
+        let mut handles = self.handles.write().await;
+        for handle in handles.values_mut() {
+            handle.abort();
+        }
+        handles.clear();
+        self.state.write().await.clear();
+    }
 }
