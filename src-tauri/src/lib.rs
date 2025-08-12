@@ -214,14 +214,18 @@ async fn start_pocketbase_instance(
         last_started: None,
         // logs: vec![],
     };
-    let project_clone = project.clone();
+    let project_clone: PocketBaseProject = project.clone();
     project_manager
         .start_project(project)
         .await
         .map_err(|e| e.to_string())
         .unwrap();
     health_check_manager
-        .start_monitoring(project_clone, std::time::Duration::from_secs(10))
+        .start_monitoring(
+            project_clone.pid,
+            project_clone.port,
+            std::time::Duration::from_secs(10),
+        )
         .await;
     Ok(())
 }
@@ -280,10 +284,18 @@ async fn resume_pocketbase_instance(
     println!("Starting PocketBase instance: {:?}", sidecar);
     let (mut _rx, child) = sidecar.spawn().unwrap();
     let pid = child.pid().to_string();
+    let pid_clone = pid.clone();
     project_manager
         .resume_project(project_name, pid)
         .await
         .map_err(|e| e.to_string())
         .unwrap();
+    health_check_manager
+        .start_monitoring(
+            pid_clone,
+            port.parse().unwrap(),
+            std::time::Duration::from_secs(10),
+        )
+        .await;
     Ok(())
 }

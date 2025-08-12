@@ -1,4 +1,3 @@
-use crate::types::PocketBaseProject;
 use reqwest::Client;
 use std::{collections::HashMap, sync::Arc, time::Duration};
 use tauri::async_runtime::{JoinHandle, RwLock};
@@ -30,9 +29,7 @@ impl HealthCheckManager {
 
     /// Start monitoring a project. If a monitor for this `project.id` already exists, this is a no-op.
     /// `check_interval` controls how often the health endpoint is polled.
-    pub async fn start_monitoring(&self, project: PocketBaseProject, check_interval: Duration) {
-        let project_id = project.pid.clone();
-
+    pub async fn start_monitoring(&self, project_id: String, port: u16, check_interval: Duration) {
         // don't start another monitor if one exists
         {
             let handles = self.handles.read().await;
@@ -54,7 +51,7 @@ impl HealthCheckManager {
             loop {
                 ticker.tick().await;
 
-                let url = format!("http://127.0.0.1:{}/api/health", project.port);
+                let url = format!("http://127.0.0.1:{}/api/health", port);
                 let is_healthy = match client.get(&url).send().await {
                     Ok(resp) => resp.status().is_success(),
                     Err(_) => false,
