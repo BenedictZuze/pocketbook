@@ -1,7 +1,7 @@
 use once_cell::sync::Lazy;
 use pocketbase_sdk::client::Client as PocketBaseClient;
 use std::path::PathBuf;
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 use tauri::{AppHandle, Manager};
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
 use tauri_plugin_shell::ShellExt;
@@ -9,11 +9,17 @@ pub mod health_check_manager;
 pub mod project_manager;
 pub mod types;
 pub mod utils;
+use crate::health_check_manager::HealthCheckManager;
 use crate::project_manager::ProjectManager;
 use crate::types::{PocketBaseProject, ProjectStatus};
 use crate::utils::{create_projects_collection, kill_pid};
 
 pub static MASTER_INSTANCE: Lazy<Mutex<Option<CommandChild>>> = Lazy::new(|| Mutex::new(None));
+
+struct AppData {
+    project_manager: ProjectManager,
+    health_check_manager: HealthCheckManager,
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -128,6 +134,20 @@ pub fn run() {
             // Authenticate with the master PocketBase instance
             let email = std::env::var("MASTER_EMAIL").unwrap_or("master@example.com".to_string());
             let password = std::env::var("MASTER_PASSWORD").unwrap_or("masterpassword".to_string());
+
+            // Initialize HealthCheckManager
+            let health_manager =
+                HealthCheckManager::new(Arc::new(move |project_id, is_healthy| {
+                    // This closure runs in the background task context (Tokio)
+                    // Keep it lightweight: emit a Tauri event or enqueue a DB update
+                    // Example: emit Tauri event (you'll need to clone an AppHandle into the closure instead)
+                    // app_handle.emit_all("instance-health", payload).unwrap();
+
+                    println!("health change: {} -> {}", project_id, is_healthy);
+
+                    // TODO: Persist to master PocketBase or update in-memory state.
+                }));
+
             app.manage(ProjectManager::new(
                 PocketBaseClient::new("http://localhost:8090")
                     .auth_with_password("_superusers", email.as_str(), password.as_str())
