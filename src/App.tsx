@@ -1,7 +1,7 @@
 import { Route, Router, Switch } from "wouter";
 import { Home } from "./pages/Home";
 import { Layout } from "./components/Layout";
-import { Provider, useAtom, useAtomValue } from "jotai";
+import { Provider } from "jotai";
 import { NewProject } from "./pages/NewProject";
 import { ProjectDetails } from "./pages/ProjectDetails";
 
