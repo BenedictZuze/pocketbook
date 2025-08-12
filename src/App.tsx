@@ -15,6 +15,7 @@ function App() {
     const unlistenPromise = listen<{ pid: string; isHealthy: boolean }>(
       "instance-health-changed",
       (event) => {
+        console.log("health changed");
         setProjects((projects) =>
           projects.map((p) =>
             p.pid === event.payload.pid
