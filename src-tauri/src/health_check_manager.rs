@@ -19,9 +19,9 @@ pub struct HealthCheckManager {
 }
 
 impl HealthCheckManager {
-    pub fn new(client: Client, health_check_callback: HealthCallback) -> Self {
+    pub fn new(health_check_callback: HealthCallback) -> Self {
         Self {
-            client,
+            client: Client::new(),
             handles: Arc::new(RwLock::new(HashMap::new())),
             state: Arc::new(RwLock::new(HashMap::new())),
             health_check_callback,
