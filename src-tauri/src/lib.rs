@@ -200,7 +200,9 @@ async fn start_pocketbase_instance(
     ]);
     println!("Starting PocketBase instance: {:?}", sidecar);
     let (mut _rx, child) = sidecar.spawn().unwrap();
-    let project_manager = app_handle.state::<ProjectManager>();
+    let app_data = app_handle.state::<AppData>();
+    let project_manager = app_data.project_manager.clone();
+    let health_check_manager = app_data.health_check_manager.clone();
     let project = PocketBaseProject {
         name: project_name.clone(),
         port,
@@ -212,11 +214,15 @@ async fn start_pocketbase_instance(
         last_started: None,
         // logs: vec![],
     };
+    let project_clone = project.clone();
     project_manager
         .start_project(project)
         .await
         .map_err(|e| e.to_string())
         .unwrap();
+    health_check_manager
+        .start_monitoring(project_clone, std::time::Duration::from_secs(10))
+        .await;
     Ok(())
 }
 
