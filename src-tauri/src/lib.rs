@@ -176,7 +176,9 @@ pub fn run() {
                 }
                 let app_data = app_handle.state::<AppData>();
                 let health_check_manager = app_data.health_check_manager.clone();
-                // health_check_manager.stop_all();
+                tauri::async_runtime::spawn(async move {
+                    health_check_manager.stop_all().await;
+                });
                 return;
             }
             _ => {}
