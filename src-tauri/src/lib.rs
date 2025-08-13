@@ -2,6 +2,7 @@ use once_cell::sync::Lazy;
 use pocketbase_sdk::client::Client as PocketBaseClient;
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
+use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
 use tauri::{AppHandle, Emitter, Manager};
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
 use tauri_plugin_shell::ShellExt;
@@ -30,6 +31,29 @@ pub fn run() {
             dotenvy::dotenv().unwrap();
             let app_handle = app.app_handle().clone();
             let app_handle_clone = app_handle.clone();
+            let _tray = TrayIconBuilder::new()
+                .on_tray_icon_event(|tray, event| match event {
+                    TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
+                        ..
+                    } => {
+                        println!("left click pressed and released");
+                        // show and focus the main window when the tray is clicked
+                        let app = tray.app_handle();
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = window.unminimize();
+                            let _ = window.show();
+                            let _ = window.set_focus();
+                        }
+                    }
+                    _ => {
+                        println!("unhandled event {event:?}");
+                    }
+                })
+                .icon(app.default_window_icon().unwrap().clone())
+                .build(app)
+                .unwrap();
             println!("Starting PocketBase...");
             let path = app_handle.path().data_dir();
             let data_dir: PathBuf;
