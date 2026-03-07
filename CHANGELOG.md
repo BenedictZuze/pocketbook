@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - v0.1.1 Automatic Health Checks on instances
-- v0.1.1 Viewing master instance logs in the GUI
 - v0.1.1 Added system tray
 
 ### Bugs
